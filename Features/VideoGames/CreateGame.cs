@@ -1,16 +1,13 @@
-﻿using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
-
+﻿using Microsoft.AspNetCore.Mvc;
 using VideoGameApiVsa.Data;
 using VideoGameApiVsa.Entities;
+using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
 
 public static class CreateGame
 {
     public record Command(string Title, string Genre, int ReleaseYear) : IRequest<Response>;
-
     public record Response(int Id, string Title, string Genre, int ReleaseYear);
 
     public class Handler(VideoGameDbContext context) : IRequestHandler<Command, Response>

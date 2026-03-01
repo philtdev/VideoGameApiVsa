@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
 using VideoGameApiVsa.Entities;
 
 namespace VideoGameApiVsa.Data;
 
-public class VideoGameDbContext : DbContext
+public class VideoGameDbContext(DbContextOptions<VideoGameDbContext> options) : DbContext(options)
 {
-    public VideoGameDbContext(DbContextOptions<VideoGameDbContext> options) : base(options)
-    {
-    }
-
     public DbSet<VideoGame> VideoGames { get; set; }
 }

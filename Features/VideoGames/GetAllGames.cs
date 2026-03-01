@@ -1,18 +1,14 @@
-﻿using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 using VideoGameApiVsa.Data;
-
 using static VideoGameApiVsa.Features.VideoGames.GetAllGames;
+using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
 
-public class GetAllGames
+public static class GetAllGames
 {
     public record Query : IRequest<IEnumerable<Response>>;
-
     public record Response(int Id, string Title, string Genre, int ReleaseYear);
 
     public class Handler(VideoGameDbContext context) : IRequestHandler<Query, IEnumerable<Response>>

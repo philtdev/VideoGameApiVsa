@@ -1,15 +1,12 @@
-﻿using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
-
+﻿using Microsoft.AspNetCore.Mvc;
 using VideoGameApiVsa.Data;
+using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
 
 public static class UpdateGame
 {
     public record Command(int Id, string Title, string Genre, int ReleaseYear) : IRequest<Response?>;
-
     public record Response(int Id, string Title, string Genre, int ReleaseYear);
 
     public class Handler(VideoGameDbContext context) : IRequestHandler<Command, Response?>
@@ -19,9 +16,7 @@ public static class UpdateGame
             var videoGame = await context.VideoGames.FindAsync(request.Id);
 
             if (videoGame == null)
-            {
                 return null;
-            }
 
             videoGame.Title = request.Title;
             videoGame.Genre = request.Genre;
@@ -42,16 +37,12 @@ public class UpdateGameController(ISender sender) : ControllerBase
     public async Task<ActionResult<UpdateGame.Response>> UpdateGame(int id, UpdateGame.Command command)
     {
         if (id != command.Id)
-        {
             return BadRequest("Id in the URL does not match the Id in the request body.");
-        }
 
         var response = await sender.Send(command);
 
         if (response is null)
-        {
             return NotFound("Video game with given Id not found.");
-        }
 
         return Ok(response);
     }

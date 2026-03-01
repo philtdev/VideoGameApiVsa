@@ -1,8 +1,6 @@
-﻿using MediatR;
-
-using Microsoft.AspNetCore.Mvc;
-
+﻿using Microsoft.AspNetCore.Mvc;
 using VideoGameApiVsa.Data;
+using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
 
@@ -40,9 +38,7 @@ public class DeleteGameController(ISender sender) : ControllerBase
         var response = await sender.Send(new DeleteGame.Command(id));
 
         if (!response)
-        {
             return NotFound("Video game with given Id not found.");
-        }
 
         return NoContent();
     }
