@@ -18,12 +18,9 @@ namespace VideoGameApiVsa.Migrations
                 name: "VideoGames",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Genre = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "longtext", nullable: false),
+                    Genre = table.Column<string>(type: "longtext", nullable: false),
                     ReleaseYear = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

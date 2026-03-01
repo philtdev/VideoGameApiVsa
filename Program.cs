@@ -12,7 +12,8 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<VideoGameDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+if (connectionString != null)
+    builder.Services.AddDbContext<VideoGameDbContext>(options => options.UseMySQL(connectionString));
 
 #endregion
 
