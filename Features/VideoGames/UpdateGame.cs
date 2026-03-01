@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using VideoGameApiVsa.Data;
+﻿using VideoGameApiVsa.Data;
+using Carter;
 using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
@@ -27,23 +27,19 @@ public static class UpdateGame
             return new Response(videoGame.Id, videoGame.Title, videoGame.Genre, videoGame.ReleaseYear);
         }
     }
-}
 
-[ApiController]
-[Route("api/games")]
-public class UpdateGameController(ISender sender) : ControllerBase
-{
-    [HttpPut("{id}")]
-    public async Task<ActionResult<UpdateGame.Response>> UpdateGame(int id, UpdateGame.Command command)
+    public class Endpoint : ICarterModule
     {
-        if (id != command.Id)
-            return BadRequest("Id in the URL does not match the Id in the request body.");
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapPut("/api/games", async (ISender sender, int id, Command command) =>
+            {
+                var updatedGame = await sender.Send(command with { Id = id });
 
-        var response = await sender.Send(command);
-
-        if (response is null)
-            return NotFound("Video game with given Id not found.");
-
-        return Ok(response);
+                return updatedGame != null
+                    ? Results.Ok(updatedGame)
+                    : Results.NotFound($"Video game with id {id} not found.");
+            });
+        }
     }
 }

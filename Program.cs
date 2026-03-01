@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VideoGameApiVsa.Data;
+using Carter;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddCarter();
 
 #region Database configuration
 
@@ -28,5 +30,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapCarter();
 
 app.Run();

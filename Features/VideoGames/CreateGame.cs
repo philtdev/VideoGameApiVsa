@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using VideoGameApiVsa.Data;
+﻿using VideoGameApiVsa.Data;
 using VideoGameApiVsa.Entities;
+using Carter;
 using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
@@ -28,17 +28,17 @@ public static class CreateGame
             return new Response(videoGame.Id, videoGame.Title, videoGame.Genre, videoGame.ReleaseYear);
         }
     }
-}
 
-[ApiController]
-[Route("api/games")]
-public class CreateGameController(ISender sender) : ControllerBase
-{
-    [HttpPost]
-    public async Task<ActionResult<CreateGame.Response>> CreateGame(CreateGame.Command command)
+    public class Endpoint : ICarterModule
     {
-        var response = await sender.Send(command);
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapPost("/api/games", async (ISender sender, Command command) =>
+            {
+                var game = await sender.Send(command);
 
-        return Created($"/api/games/{response.Id}", response);
+                return Results.Created($"/api/games/{game.Id}", game);
+            });
+        }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using VideoGameApiVsa.Data;
+﻿using VideoGameApiVsa.Data;
+using Carter;
 using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
@@ -26,20 +26,15 @@ public static class DeleteGame
             return true;
         }
     }
-}
 
-[ApiController]
-[Route("api/games")]
-public class DeleteGameController(ISender sender) : ControllerBase
-{
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<bool>> DeleteGame(int id)
+    public class Endpoint : ICarterModule
     {
-        var response = await sender.Send(new DeleteGame.Command(id));
-
-        if (!response)
-            return NotFound("Video game with given Id not found.");
-
-        return NoContent();
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapDelete("/api/games", async (ISender sender, int id) =>
+                await sender.Send(new Command(id))
+                    ? Results.NoContent()
+                    : Results.NotFound($"Video game with id {id} not found."));
+        }
     }
 }

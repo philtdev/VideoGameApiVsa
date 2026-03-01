@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using VideoGameApiVsa.Data;
-using static VideoGameApiVsa.Features.VideoGames.GetAllGames;
+using Carter;
 using MediatR;
 
 namespace VideoGameApiVsa.Features.VideoGames;
@@ -20,17 +19,13 @@ public static class GetAllGames
             return videoGames.Select(vg => new Response(vg.Id, vg.Title, vg.Genre, vg.ReleaseYear));
         }
     }
-}
 
-[ApiController]
-[Route("api/games")]
-public class GetAllVideoGamesController(ISender sender) : ControllerBase
-{
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Response>>> GetAllGames()
+    public class Endpoint : ICarterModule
     {
-        var response = await sender.Send(new Query());
-
-        return Ok(response);
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapGet("/api/games", async (ISender sender) =>
+                await sender.Send(new Query()));
+        }
     }
 }
